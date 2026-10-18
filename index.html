@@ -102,7 +102,8 @@
         border: 1px solid var(--border); border-left: 4px solid var(--ht);
         background: var(--ht-soft); border-radius: 10px; padding: 14px 16px; font-size: 13.5px;
       }
-      .callout strong { display: block; margin-bottom: 6px; font-size: 14.5px; }
+      .callout > strong { display: block; margin-bottom: 6px; font-size: 14.5px; }
+      .callout p strong { display: inline; font-size: inherit; }
       .callout p { margin: 0; }
       .callout p + p { margin-top: 9px; }
       .callout.is-warn { border-left-color: var(--warn); background: var(--warn-soft); }
