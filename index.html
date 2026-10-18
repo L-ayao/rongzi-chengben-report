@@ -1,0 +1,771 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="融资融券成本测算报告书：对比华泰 2.6% 单利计息与友商 2.4% 日复利计息机制下的长期真实成本。" />
+    <title>融资融券成本测算报告书</title>
+    <style>
+      :root {
+        --bg: #f4f6fa;
+        --surface: #ffffff;
+        --surface-2: #f7f8fb;
+        --border: #e3e8f0;
+        --text: #1f2937;
+        --muted: #6b7280;
+        --ht: #1d4ed8;
+        --ht-soft: #eaf0fe;
+        --ot: #d97706;
+        --ot-soft: #fff6e8;
+        --good: #15803d;
+        --bad: #dc2626;
+        --warn: #b45309;
+        --warn-soft: #fff8ec;
+        --radius: 14px;
+        --shadow: 0 1px 2px rgba(15, 23, 42, .05), 0 10px 28px rgba(15, 23, 42, .06);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0b1220;
+          --surface: #141d2e;
+          --surface-2: #1b2740;
+          --border: #2b3a55;
+          --text: #e5eaf2;
+          --muted: #94a3b8;
+          --ht: #5b8cff;
+          --ht-soft: rgba(91, 140, 255, .14);
+          --ot: #f5a524;
+          --ot-soft: rgba(245, 165, 36, .12);
+          --good: #4ade80;
+          --bad: #f87171;
+          --warn: #fbbf24;
+          --warn-soft: rgba(251, 191, 36, .1);
+          --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 10px 28px rgba(0, 0, 0, .35);
+        }
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font: 15px/1.65 -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      .page-shell { max-width: 1080px; margin: 0 auto; padding: 40px 22px 56px; }
+
+      /* header */
+      .page-header { text-align: center; margin-bottom: 30px; }
+      .eyebrow {
+        display: inline-block; margin: 0 0 10px; padding: 4px 12px;
+        font-size: 12.5px; font-weight: 600; letter-spacing: .08em; color: var(--ht);
+        background: var(--ht-soft); border: 1px solid transparent; border-radius: 999px;
+      }
+      .page-header h1 { margin: 0 0 12px; font-size: 30px; font-weight: 700; letter-spacing: .01em; }
+      .lede { max-width: 780px; margin: 0 auto; color: var(--muted); font-size: 15px; }
+
+      /* grid & panels */
+      .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+      .panel {
+        background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+        box-shadow: var(--shadow); padding: 22px;
+      }
+      .panel-wide { grid-column: 1 / -1; }
+      @media (max-width: 860px) {
+        .content-grid { grid-template-columns: 1fr; }
+        .page-header h1 { font-size: 24px; }
+        .page-shell { padding: 26px 14px 40px; }
+      }
+      .panel-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+      .panel-head h2 { margin: 0; font-size: 19px; font-weight: 700; }
+      .panel-note { margin: 0; font-size: 12.5px; color: var(--muted); }
+
+      /* tables */
+      .table-scroll { overflow-x: auto; }
+      table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 560px; }
+      caption { caption-side: top; text-align: left; font-size: 12.5px; font-weight: 600; color: var(--muted); padding-bottom: 8px; }
+      th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+      thead th { background: var(--surface-2); font-weight: 600; font-size: 13.5px; }
+      th.th-ht { background: var(--ht); color: #fff; }
+      th.th-ot { background: var(--ot); color: #fff; }
+      tbody tr:last-child td { border-bottom: none; }
+      tr.is-total td { border-top: 2px solid var(--border); font-weight: 700; background: var(--surface-2); }
+      .cell-good { color: var(--good); font-weight: 600; }
+      .cell-bad { color: var(--bad); font-weight: 600; }
+
+      /* callout */
+      .callout {
+        border: 1px solid var(--border); border-left: 4px solid var(--ht);
+        background: var(--ht-soft); border-radius: 10px; padding: 14px 16px; font-size: 13.5px;
+      }
+      .callout strong { display: block; margin-bottom: 6px; font-size: 14.5px; }
+      .callout p { margin: 0; }
+      .callout.is-warn { border-left-color: var(--warn); background: var(--warn-soft); }
+
+      /* advantage list */
+      .adv-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      @media (max-width: 860px) { .adv-list { grid-template-columns: 1fr; } }
+      .adv-item { display: flex; gap: 12px; }
+      .adv-item .icon { width: 38px; height: 38px; flex: none; padding: 9px; border-radius: 10px; background: var(--ht-soft); color: var(--ht); }
+      .adv-item h3 { margin: 0 0 4px; font-size: 15px; font-weight: 650; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+      .adv-item p { margin: 0; font-size: 13.5px; color: var(--muted); }
+      .tag {
+        display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 11px; font-weight: 600;
+        background: var(--ot-soft); color: var(--ot);
+      }
+      .section-stack { display: grid; gap: 16px; }
+
+      /* charts */
+      .chart { width: 100%; height: 330px; }
+      .chart-sm { height: 320px; }
+
+      /* controls */
+      .controls { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px 16px; }
+      @media (max-width: 860px) { .controls { grid-template-columns: repeat(2, 1fr); } }
+      @media (max-width: 520px) { .controls { grid-template-columns: 1fr; } }
+      .group-title { margin: 4px 0 0; font-size: 13px; font-weight: 700; color: var(--muted); letter-spacing: .04em; }
+      .field { display: grid; gap: 5px; }
+      .field label { font-size: 13px; font-weight: 600; color: var(--text); }
+      .field input {
+        width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 9px;
+        background: var(--surface); color: var(--text); font-size: 14px; font-family: inherit;
+      }
+      .field input:focus { outline: 2px solid var(--ht); outline-offset: 1px; border-color: transparent; }
+      .field-hint { font-size: 12px; color: var(--muted); }
+
+      /* buttons */
+      .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+      .btn {
+        padding: 8px 16px; border-radius: 9px; border: 1px solid var(--border);
+        background: var(--surface); color: var(--text); font-size: 13.5px; font-weight: 600; cursor: pointer;
+        transition: background .15s, border-color .15s, color .15s;
+      }
+      .btn:hover { border-color: var(--ht); color: var(--ht); }
+      .btn-primary { background: var(--ht); border-color: var(--ht); color: #fff; }
+      .btn-primary:hover { background: var(--ht); color: #fff; opacity: .9; }
+
+      /* kpi */
+      .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+      @media (max-width: 860px) { .kpi-grid { grid-template-columns: 1fr; } }
+      .kpi-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; background: var(--surface-2); }
+      .kpi-card.is-ht { border-top: 3px solid var(--ht); }
+      .kpi-card.is-ot { border-top: 3px solid var(--ot); }
+      .kpi-card.is-delta { border-top: 3px solid var(--good); }
+      .kpi-label { margin: 0 0 6px; font-size: 12.5px; font-weight: 600; color: var(--muted); display: flex; align-items: center; gap: 7px; }
+      .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+      .is-ht .dot { background: var(--ht); }
+      .is-ot .dot { background: var(--ot); }
+      .is-delta .dot { background: var(--good); }
+      .kpi-value { margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -.01em; }
+      .kpi-value.kpi-delta-value { color: var(--good); }
+      .kpi-sub { margin: 2px 0 0; font-size: 12.5px; color: var(--muted); }
+
+      footer.workmate-attribution { margin-top: 26px; text-align: center; font-size: 12px; color: var(--muted); }
+    </style>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="page-header">
+        <p class="eyebrow">融资融券 · 成本测算</p>
+        <h1>融资融券成本测算报告书</h1>
+        <p class="lede">
+          以 9,000 万元负债、两年期、按日计息为基准场景，对比两种计息机制的长期真实成本：
+          华泰 2.6%（按当日融资余额计息，不含利息）与友商 2.4%（按当日融资余额计息，含利息）。
+        </p>
+      </header>
+
+      <main class="content-grid" aria-label="报告内容">
+        <!-- ========== 一、华泰对比友商的优势 ========== -->
+        <section class="panel panel-wide" aria-labelledby="s1">
+          <div class="panel-head">
+            <h2 id="s1">一、华泰对比友商的优势</h2>
+            <p class="panel-note">差距不在利率数字，而在计息机制</p>
+          </div>
+
+          <div class="table-scroll">
+            <table>
+              <caption>计息机制逐项对比</caption>
+              <thead>
+                <tr>
+                  <th scope="col">对比项</th>
+                  <th scope="col" class="th-ht">华泰 · 2.6%</th>
+                  <th scope="col" class="th-ot">友商 · 2.4%</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>计息基数</td>
+                  <td class="cell-good">当日融资余额（仅本金）</td>
+                  <td class="cell-bad">融资余额 <strong>+ 利息</strong></td>
+                </tr>
+                <tr>
+                  <td>计息方式</td>
+                  <td class="cell-good">单利，基数恒定</td>
+                  <td class="cell-bad">日复利，利滚利</td>
+                </tr>
+                <tr>
+                  <td>计息基数是否随时间增长</td>
+                  <td class="cell-good">否，始终 9,000.00 万</td>
+                  <td class="cell-bad">是，第 2 年已达 9,218.61 万</td>
+                </tr>
+                <tr>
+                  <td>展期结息安排</td>
+                  <td class="cell-good">最长两年不付息，满两年再展期时才结息</td>
+                  <td>按合同约定周期结息，未付则滚入本金</td>
+                </tr>
+                <tr>
+                  <td>征信影响</td>
+                  <td class="cell-good">不影响</td>
+                  <td>视结息履约情况</td>
+                </tr>
+                <tr>
+                  <td>成本曲线形态</td>
+                  <td class="cell-good">线性，可精确预测</td>
+                  <td class="cell-bad">指数，随时间加速</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout" style="margin-top: 16px">
+            <strong>核心差异：2.4% 是标价，不是真实成本</strong>
+            <p>
+              友商标价 2.4%，但其计息基数是「融资余额 + 利息」，且按日逐日利滚利，
+              因此<strong>真实有效年利率为 2.4290%</strong>（= (1 + 2.4% ÷ 365)<sup>365</sup> − 1），
+              与华泰 2.6% 的真实差距为 <strong>0.171 个百分点</strong>。
+              更关键的是，复利的基数每日膨胀，<strong>成本曲线呈指数形态</strong>，
+              与华泰的线性成本差距随时间持续收窄，<strong>持有满 6.59 年后总成本反超</strong>。
+            </p>
+          </div>
+
+          <ul class="adv-list" style="margin-top: 16px">
+            <li class="adv-item">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 6v12"/><path d="M14.7 9.2a2.6 2.6 0 0 0-2.5-1.6h-.4a2.6 2.6 0 0 0 0 5.2h.4a2.6 2.6 0 0 1 0 5.2H9.3a2.6 2.6 0 0 1-2.5-1.6"/></svg>
+              <div>
+                <h3>成本确定性<span class="tag">单利</span></h3>
+                <p>计息基数恒为本金，<strong>成本可精确预测</strong>。无论持有 1 年还是 10 年，每一年的利息都是 234 万，不会随时间加速膨胀。</p>
+              </div>
+            </li>
+
+            <li class="adv-item">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="7" width="14" height="12" rx="2.5"/><rect x="7.5" y="3" width="14" height="12" rx="2.5"/><path d="M12 11v2"/><path d="M15.5 11v2"/></svg>
+              <div>
+                <h3>不占用其他金融机构授信额度<span class="tag">免付息</span></h3>
+                <p>华泰合约期内<strong>无需支付利息</strong>，客户不必为筹措利息资金而向银行等其他金融机构融资，<strong>因此不会占用其他金融机构的授信额度</strong>，个人整体授信空间保持完整。</p>
+              </div>
+            </li>
+
+            <li class="adv-item">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg>
+              <div>
+                <h3>最长两年不付息展期</h3>
+                <p>合约期内无需支付利息，<strong>满两年后办理展期时才需结清利息</strong>，且不影响征信。客户不必为筹措付息资金被迫减仓，也不必承担利息滚入本金的复利负担。</p>
+              </div>
+            </li>
+
+            <li class="adv-item">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-6"/></svg>
+              <div>
+                <h3>持有越久，优势越大</h3>
+                <p>友商按日对「融资余额 + 利息」计息，成本呈<strong>指数曲线</strong>；华泰只对本金计息，成本呈<strong>线性</strong>。两者差距随时间收窄并反转：<strong>6.59 年成本持平，10 年华泰可省 101.15 万</strong>。对计划长期持仓或反复展期的客户，单利机制的价值会持续兑现。</p>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <!-- ========== 二、华泰给客户的诚意 ========== -->
+        <section class="panel panel-wide" aria-labelledby="s2">
+          <div class="panel-head">
+            <h2 id="s2">二、华泰给客户的诚意</h2>
+            <p class="panel-note">市场优势利率 · 交易执行 · 费用减免</p>
+          </div>
+
+          <ul class="adv-list">
+            <li class="adv-item">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 6v12"/><path d="M14.7 9.2a2.6 2.6 0 0 0-2.5-1.6h-.4a2.6 2.6 0 0 0 0 5.2h.4a2.6 2.6 0 0 1 0 5.2H9.3a2.6 2.6 0 0 1-2.5-1.6"/></svg>
+              <div>
+                <h3>市场优势两融利率</h3>
+                <p>以市场优势利率提供融资，且<strong>计息基数只看当日融资余额、利息不再计息</strong>。同等利率水平下，单利机制显著优于含利息计息的复利方案，长期持有成本更低。</p>
+              </div>
+            </li>
+
+            <li class="adv-item">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-6"/></svg>
+              <div>
+                <h3>matic 交易系统 · AI 算法减少滑点</h3>
+                <p>智能算法优化拆单与执行路径，<strong>降低大额交易的市场冲击成本</strong>。滑点是隐性成本，按 9,000 万规模测算，每减少 1 个基点即节省约 0.9 万元，在频繁调仓场景下持续累积。</p>
+              </div>
+            </li>
+
+            <li class="adv-item">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l10 6H2l10-6z"/><path d="M4 8v10"/><path d="M9 8v10"/><path d="M15 8v10"/><path d="M20 8v10"/><path d="M2 21h20"/></svg>
+              <div>
+                <h3>独家优惠手续费<span class="tag">专属费率</span></h3>
+                <p>为最低费用客户账户提供<strong>独家优惠的交易手续费率</strong>，小额、高频、拆单交易的成本优势明显，尤其适合执行算法交易、分批建仓与网格策略的客户。</p>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <!-- ========== 三、成本测算器 ========== -->
+        <section class="panel panel-wide" aria-labelledby="s3">
+          <div class="panel-head">
+            <h2 id="s3">三、成本测算器：9,000 万元 / 两年期</h2>
+            <p class="panel-note">按日计息 · 每年 365 天 · 单利 vs 日复利</p>
+          </div>
+
+          <div class="section-stack">
+            <div class="callout">
+              <strong>测算逻辑</strong>
+              <p>
+                <strong>华泰（2.6%，不含利息）：</strong>每日利息 = 当日融资余额 × 2.6% ÷ 365，融资余额恒为 9,000 万，
+                两年利息 = 9,000 × 2.6% × 2 = <strong>468.00 万元</strong>。<br />
+                <strong>友商（2.4%，含利息）：</strong>每日利息 =（当日融资余额 + 累计利息）× 2.4% ÷ 365，
+                基数逐日递增，730 日后余额 = 9,000 × (1 + 2.4% ÷ 365)<sup>730</sup> = 9,442.52 万，
+                两年利息 = 9,442.52 − 9,000 = <strong>442.52 万元</strong>。
+              </p>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <caption>两年成本逐年拆解（单位：万元）</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">期间</th>
+                    <th scope="col" class="th-ht">华泰 2.6% 单利</th>
+                    <th scope="col" class="th-ot">友商 2.4% 日复利</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>第 1 年利息</td>
+                    <td>234.00</td>
+                    <td>218.61</td>
+                  </tr>
+                  <tr>
+                    <td>第 2 年利息</td>
+                    <td>234.00</td>
+                    <td>223.92</td>
+                  </tr>
+                  <tr class="is-total">
+                    <td>两年利息合计</td>
+                    <td>468.00</td>
+                    <td>442.52</td>
+                  </tr>
+                  <tr>
+                    <td>期末本金余额</td>
+                    <td>9,000.00</td>
+                    <td>9,442.52</td>
+                  </tr>
+                  <tr>
+                    <td>期末占用授信额度</td>
+                    <td class="cell-good">9,000.00</td>
+                    <td class="cell-bad">9,442.52</td>
+                  </tr>
+                  <tr>
+                    <td>真实有效年利率</td>
+                    <td>2.6000%</td>
+                    <td class="cell-bad">2.4290%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <caption>不同期限下的成本走势（单位：万元）</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">期限</th>
+                    <th scope="col" class="th-ht">华泰 2.6% 单利</th>
+                    <th scope="col" class="th-ot">友商 2.4% 日复利</th>
+                    <th scope="col">累计差额（华泰 − 其他）</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>1 年</td><td>234.00</td><td>218.61</td><td>+15.39</td></tr>
+                  <tr><td>2 年</td><td>468.00</td><td>442.52</td><td>+25.48</td></tr>
+                  <tr><td>3 年</td><td>702.00</td><td>671.88</td><td>+30.12</td></tr>
+                  <tr><td>4 年</td><td>936.00</td><td>906.80</td><td>+29.20</td></tr>
+                  <tr><td>5 年</td><td>1,170.00</td><td>1,147.43</td><td>+22.57</td></tr>
+                  <tr><td>6 年</td><td>1,404.00</td><td>1,393.91</td><td>+10.09</td></tr>
+                  <tr class="is-total"><td>6.59 年（临界）</td><td>1,541.23</td><td>1,541.23</td><td>0（持平）</td></tr>
+                  <tr><td>7 年</td><td>1,638.00</td><td>1,646.37</td><td class="cell-good">−8.37</td></tr>
+                  <tr><td>8 年</td><td>1,872.00</td><td>1,904.97</td><td class="cell-good">−32.97</td></tr>
+                  <tr><td>10 年</td><td>2,340.00</td><td>2,441.15</td><td class="cell-good">−101.15</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="callout is-warn">
+              <strong>如何理解 25.48 万这个数字</strong>
+              <p>
+                两年期内两种方案的利息差额为 25.48 万元，仅占 9,000 万本金的 <strong>0.28%</strong>；
+                而友商方案为此付出的代价是：<strong>承担利息滚入本金的复利负担、成本曲线呈指数上升、
+                失去展期时的结息灵活性</strong>。若持有期延长至 6.59 年以上，这点标价优势将完全消失并转为劣势。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========== 图表 ========== -->
+        <section class="panel" aria-labelledby="s4">
+          <div class="panel-head">
+            <h2 id="s4">两年成本对比</h2>
+            <p class="panel-note">含交易成本 · 单位：万元</p>
+          </div>
+          <div class="chart chart-sm" id="chart-bars" role="img" aria-label="两年期两种计息方式成本对比柱状图"></div>
+        </section>
+
+        <section class="panel" aria-labelledby="s5">
+          <div class="panel-head">
+            <h2 id="s5">成本曲线：华泰线性 vs 友商指数</h2>
+            <p class="panel-note">横轴 1–20 年 · 灰色虚线为友商「若按单利」参照</p>
+          </div>
+          <div class="chart chart-sm" id="chart-lines" role="img" aria-label="成本随期限变化曲线：华泰为线性，友商日复利为指数，并附单利参照线"></div>
+        </section>
+
+        <!-- ========== 四、动态成本测算器 ========== -->
+        <section class="panel panel-wide" aria-labelledby="s6">
+          <div class="panel-head">
+            <h2 id="s6">四、动态成本测算器</h2>
+            <p class="panel-note">修改任意参数，结果与图表实时重算</p>
+          </div>
+
+          <div class="controls">
+            <p class="group-title" style="grid-column: 1 / -1">基础参数</p>
+
+            <div class="field">
+              <label for="inp-debt">负债规模（万元）</label>
+              <input type="number" id="inp-debt" value="9000" min="0" step="100" />
+            </div>
+
+            <div class="field">
+              <label for="inp-months">期限（月）</label>
+              <input type="number" id="inp-months" value="24" min="1" max="360" step="1" />
+              <span class="field-hint">默认 24 个月（两年）</span>
+            </div>
+
+            <div class="field">
+              <label for="inp-rate-ht">华泰利率（%/年）</label>
+              <input type="number" id="inp-rate-ht" value="2.6" min="0" step="0.05" />
+              <span class="field-hint">方式一：只对本金计息</span>
+            </div>
+
+            <div class="field">
+              <label for="inp-rate-ot">友商利率（%/年）</label>
+              <input type="number" id="inp-rate-ot" value="2.4" min="0" step="0.05" />
+              <span class="field-hint">方式二：对余额 + 利息计息</span>
+            </div>
+
+            <p class="group-title" style="grid-column: 1 / -1">交易成本参数</p>
+
+            <div class="field">
+              <label for="inp-turnover">年交易总额（万元）</label>
+              <input type="number" id="inp-turnover" value="27000" min="0" step="1000" />
+              <span class="field-hint">默认按 3 倍年换手估算</span>
+            </div>
+
+            <div class="field">
+              <label for="inp-ticket">平均单笔金额（万元）</label>
+              <input type="number" id="inp-ticket" value="3000" min="1" step="100" />
+              <span class="field-hint">用于判断是否触发最低费用</span>
+            </div>
+
+            <div class="field">
+              <label for="inp-fee-ht">华泰费率（万分之）</label>
+              <input type="number" id="inp-fee-ht" value="1.5" min="0" step="0.1" />
+            </div>
+
+            <div class="field">
+              <label for="inp-fee-ot">友商费率（万分之）</label>
+              <input type="number" id="inp-fee-ot" value="2.5" min="0" step="0.1" />
+            </div>
+
+            <div class="field">
+              <label for="inp-min-ht">华泰单笔最低费用（元）</label>
+              <input type="number" id="inp-min-ht" value="0" min="0" step="1" />
+              <span class="field-hint">最低费用客户账户</span>
+            </div>
+
+            <div class="field">
+              <label for="inp-min-ot">友商单笔最低费用（元）</label>
+              <input type="number" id="inp-min-ot" value="5" min="0" step="1" />
+              <span class="field-hint">常见 5 元起收</span>
+            </div>
+          </div>
+
+          <div class="btn-row" style="margin-top: 16px">
+            <button type="button" class="btn btn-primary" id="btn-reset">恢复默认参数</button>
+            <button type="button" class="btn" data-months="24">两年期</button>
+            <button type="button" class="btn" data-months="60">五年期</button>
+            <button type="button" class="btn" data-months="120">十年期</button>
+            <button type="button" class="btn" id="btn-scroll">查看测算口径</button>
+          </div>
+
+          <div class="kpi-grid" style="margin-top: 18px">
+            <article class="kpi-card is-ht">
+              <p class="kpi-label"><span class="dot"></span>华泰综合成本</p>
+              <p class="kpi-value" id="out-ht">—</p>
+              <p class="kpi-sub" id="out-ht-sub">利息 + 交易成本</p>
+            </article>
+
+            <article class="kpi-card is-ot">
+              <p class="kpi-label"><span class="dot"></span>友商综合成本</p>
+              <p class="kpi-value" id="out-ot">—</p>
+              <p class="kpi-sub" id="out-ot-sub">利息 + 交易成本</p>
+            </article>
+
+            <article class="kpi-card is-delta">
+              <p class="kpi-label"><span class="dot"></span>差额</p>
+              <p class="kpi-value kpi-delta-value" id="out-delta">—</p>
+              <p class="kpi-sub" id="out-delta-sub">华泰 − 其他</p>
+            </article>
+          </div>
+
+          <div class="chart" id="chart-calc" role="img" aria-label="动态测算结果：两种计息方式综合成本随期限变化曲线"></div>
+
+          <div class="callout" id="calc-note" style="margin-top: 14px">
+            <strong>测算口径</strong>
+            <p>
+              <strong>方式一（华泰）：</strong>每日利息 = 当日融资余额 × 年利率 ÷ 365，计息基数恒为初始本金，利息不计入基数。<br />
+              <strong>方式二（其他）：</strong>每日利息 =（当日融资余额 + 累计利息）× 年利率 ÷ 365，计息基数逐日递增（日复利）。<br />
+              <strong>交易成本：</strong>年交易总额 ÷ 平均单笔金额 × 期限年数，逐笔取「单笔金额 × 费率」与「最低费用」的较大值。
+            </p>
+          </div>
+        </section>
+
+        <!-- ========== 五、结论 ========== -->
+        <section class="panel panel-wide" aria-labelledby="s7">
+          <div class="panel-head">
+            <h2 id="s7">五、综合结论</h2>
+          </div>
+
+          <div class="section-stack">
+            <div class="callout">
+              <strong>1. 标价差 ≠ 成本差</strong>
+              <p>2.4% 与 2.6% 的 0.2 个百分点是标价差。友商按日对「融资余额 + 利息」计息，真实有效年利率为 2.4290%，与华泰的真实差距为 0.171 个百分点。</p>
+            </div>
+
+            <div class="callout">
+              <strong>2. 复利的代价随时间放大</strong>
+              <p>两年期差额 25.48 万，仅占 9,000 万本金的 0.28%。持有满 6.59 年，两者成本持平；10 年华泰反超 101.15 万。对长期持仓或反复展期的客户，复利方案的劣势会持续扩大。</p>
+            </div>
+
+            <div class="callout">
+              <strong>3. 授信额度与展期灵活性是隐性收益</strong>
+              <p>华泰合约期内无需付息，客户不必为筹措利息资金而向银行等其他金融机构融资，<strong>不会占用其他金融机构的授信额度</strong>；同时最长两年不付息展期、不影响征信，客户不必为付息被动减仓。</p>
+            </div>
+
+            <div class="callout">
+              <strong>4. 交易执行构成第二层优势</strong>
+              <p>免五 + 更低费率 + matic 系统 AI 减滑点，在活跃交易场景下持续摊薄综合成本。负债规模越大、交易越频繁，这部分优势越显著。</p>
+            </div>
+
+            <div class="callout is-warn">
+              <strong>建议</strong>
+              <p>
+                华泰 2.6% 的价值不只在利率数字，更在于<strong>「单利计息 + 利息不占额度 + 两年不付息展期 + 低成本交易执行」的组合</strong>。
+                建议按客户真实负债规模、计划持有期限与交易习惯，使用上方动态测算器代入验证，重点关注<strong>长期成本曲线</strong>与<strong>授信额度占用</strong>两项。
+              </p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="workmate-attribution">由 WORKMATE 生成</footer>
+    </div>
+
+    <script>
+      (function () {
+        var $ = function (id) { return document.getElementById(id); };
+        var inputs = {
+          debt: $('inp-debt'), months: $('inp-months'), rateHt: $('inp-rate-ht'), rateOt: $('inp-rate-ot'),
+          turnover: $('inp-turnover'), ticket: $('inp-ticket'), feeHt: $('inp-fee-ht'), feeOt: $('inp-fee-ot'),
+          minHt: $('inp-min-ht'), minOt: $('inp-min-ot')
+        };
+        var defaults = {};
+        Object.keys(inputs).forEach(function (k) { defaults[k] = inputs[k].value; });
+
+        function num(el) { return Math.max(0, parseFloat(el.value) || 0); }
+        var fmt = function (n) {
+          return (Math.round(n * 100) / 100).toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        };
+
+        function annualCost(debt, rate, years) {
+          return debt * rate * years;
+        }
+        function compoundInterest(debt, rate, years) {
+          var days = Math.round(years * 365);
+          return debt * (Math.pow(1 + rate / 365, days) - 1);
+        }
+        function tradeCost(turnover, ticket, years, feeRate, minFeeWan) {
+          var trades = (turnover / ticket) * years;
+          var perTrade = Math.max(ticket * feeRate, minFeeWan);
+          return trades * perTrade;
+        }
+
+        function compute() {
+          var debt = num(inputs.debt), months = Math.max(1, Math.round(num(inputs.months)));
+          var years = months / 12;
+          var rateHt = num(inputs.rateHt) / 100, rateOt = num(inputs.rateOt) / 100;
+          var turnover = num(inputs.turnover), ticket = Math.max(1, num(inputs.ticket));
+          var feeHt = num(inputs.feeHt) / 10000, feeOt = num(inputs.feeOt) / 10000;
+          var minHt = num(inputs.minHt) / 10000, minOt = num(inputs.minOt) / 10000;
+
+          var iHt = annualCost(debt, rateHt, years);
+          var iOt = compoundInterest(debt, rateOt, years);
+          var tHt = tradeCost(turnover, ticket, years, feeHt, minHt);
+          var tOt = tradeCost(turnover, ticket, years, feeOt, minOt);
+          var totalHt = iHt + tHt;
+          var totalOt = iOt + tOt;
+          return { debt: debt, months: months, years: years, iHt: iHt, iOt: iOt, tHt: tHt, tOt: tOt, totalHt: totalHt, totalOt: totalOt, delta: totalHt - totalOt };
+        }
+
+        function render() {
+          var r = compute();
+          $('out-ht').textContent = fmt(r.totalHt) + ' 万元';
+          $('out-ht-sub').textContent = '利息 ' + fmt(r.iHt) + ' + 交易 ' + fmt(r.tHt) + ' 万';
+          $('out-ot').textContent = fmt(r.totalOt) + ' 万元';
+          $('out-ot-sub').textContent = '利息 ' + fmt(r.iOt) + ' + 交易 ' + fmt(r.tOt) + ' 万';
+          var d = $('out-delta');
+          d.textContent = (r.delta >= 0 ? '+' : '') + fmt(r.delta) + ' 万元';
+          d.style.color = r.delta >= 0 ? 'var(--good)' : 'var(--bad)';
+          $('out-delta-sub').textContent = (r.delta >= 0 ? '华泰更省 ' : '友商更省 ') + fmt(Math.abs(r.delta)) + ' 万';
+          updateCalcChart(r);
+        }
+
+        function curveData(r, stepMonths) {
+          var xs = [], ht = [], ot = [];
+          var rateHt = num(inputs.rateHt) / 100, rateOt = num(inputs.rateOt) / 100;
+          var turnover = num(inputs.turnover), ticket = Math.max(1, num(inputs.ticket));
+          var feeHt = num(inputs.feeHt) / 10000, feeOt = num(inputs.feeOt) / 10000;
+          var minHt = num(inputs.minHt) / 10000, minOt = num(inputs.minOt) / 10000;
+          for (var m = 0; m <= r.months; m += stepMonths) {
+            var y = m / 12;
+            xs.push(y);
+            ht.push(annualCost(r.debt, rateHt, y) + tradeCost(turnover, ticket, y, feeHt, minHt));
+            ot.push(compoundInterest(r.debt, rateOt, y) + tradeCost(turnover, ticket, y, feeOt, minOt));
+          }
+          return { xs: xs, ht: ht, ot: ot };
+        }
+
+        var calcChart = null, calcOption = null;
+        function updateCalcChart(r) {
+          if (!calcChart || !calcOption) return;
+          var step = r.months <= 36 ? 1 : r.months <= 120 ? 2 : 6;
+          var d = curveData(r, step);
+          calcOption.xAxis[0].data = d.xs;
+          calcOption.series[0].data = d.ht;
+          calcOption.series[1].data = d.ot;
+          calcChart.setOption(calcOption, { notMerge: true });
+        }
+
+        function initCharts() {
+          if (!window.echarts) return;
+          var axisColor = getComputedStyle(document.body).getPropertyValue('--muted').trim();
+          var splitColor = getComputedStyle(document.body).getPropertyValue('--border').trim();
+          var htColor = getComputedStyle(document.body).getPropertyValue('--ht').trim();
+          var otColor = getComputedStyle(document.body).getPropertyValue('--ot').trim();
+          var baseText = { color: axisColor, fontFamily: 'inherit' };
+
+          var bars = echarts.init($('chart-bars'));
+          bars.setOption({
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, valueFormatter: function (v) { return fmt(v) + ' 万元'; } },
+            legend: { data: ['华泰 2.6% 单利', '友商 2.4% 日复利'], top: 4, textStyle: baseText },
+            grid: { left: 8, right: 12, top: 44, bottom: 4, containLabel: true },
+            xAxis: { type: 'category', data: ['利息成本', '交易成本', '综合成本'], axisLine: { lineStyle: { color: splitColor } }, axisLabel: baseText },
+            yAxis: { type: 'value', name: '万元', nameTextStyle: baseText, axisLabel: baseText, splitLine: { lineStyle: { color: splitColor } } },
+            series: [
+              { name: '华泰 2.6% 单利', type: 'bar', barWidth: 30, data: [468.00, 8.10, 476.10], itemStyle: { color: htColor, borderRadius: [5, 5, 0, 0] }, label: { show: true, position: 'top', formatter: function (p) { return fmt(p.value); }, color: htColor } },
+              { name: '友商 2.4% 日复利', type: 'bar', barWidth: 30, data: [442.52, 13.50, 456.02], itemStyle: { color: otColor, borderRadius: [5, 5, 0, 0] }, label: { show: true, position: 'top', formatter: function (p) { return fmt(p.value); }, color: otColor } }
+            ]
+          });
+
+          var years = [];
+          var htLine = [], otLine = [], otSimple = [];
+          for (var y = 1; y <= 20; y++) {
+            years.push(y);
+            htLine.push(9000 * 0.026 * y);
+            otLine.push(9000 * (Math.pow(1 + 0.024 / 365, 365 * y) - 1));
+            otSimple.push(9000 * 0.024 * y);
+          }
+          var lines = echarts.init($('chart-lines'));
+          lines.setOption({
+            tooltip: { trigger: 'axis', valueFormatter: function (v) { return fmt(v) + ' 万元'; } },
+            legend: { data: ['华泰 单利', '友商 日复利', '友商（若按单利）'], top: 4, textStyle: baseText },
+            grid: { left: 8, right: 16, top: 44, bottom: 4, containLabel: true },
+            xAxis: { type: 'category', name: '年', nameTextStyle: baseText, data: years, axisLine: { lineStyle: { color: splitColor } }, axisLabel: baseText },
+            yAxis: { type: 'value', name: '累计利息（万元）', nameTextStyle: baseText, axisLabel: baseText, splitLine: { lineStyle: { color: splitColor } } },
+            series: [
+              { name: '华泰 单利', type: 'line', smooth: true, data: htLine, itemStyle: { color: htColor }, lineStyle: { width: 3, color: htColor }, symbol: 'none' },
+              { name: '友商 日复利', type: 'line', smooth: true, data: otLine, itemStyle: { color: otColor }, lineStyle: { width: 3, color: otColor }, symbol: 'none' },
+              { name: '友商（若按单利）', type: 'line', smooth: true, data: otSimple, itemStyle: { color: axisColor }, lineStyle: { type: 'dashed', width: 2, color: axisColor }, symbol: 'none' },
+              { type: 'line', markLine: { silent: true, symbol: 'none', lineStyle: { color: axisColor, type: 'dashed', width: 1 }, label: { formatter: '6.59 年持平', color: axisColor, position: 'insideEndTop' }, data: [{ xAxis: 6.59 }] } }
+            ]
+          });
+
+          calcChart = echarts.init($('chart-calc'));
+          calcOption = {
+            tooltip: { trigger: 'axis', valueFormatter: function (v) { return fmt(v) + ' 万元'; } },
+            legend: { data: ['华泰综合成本', '友商综合成本'], top: 4, textStyle: baseText },
+            grid: { left: 8, right: 16, top: 44, bottom: 4, containLabel: true },
+            xAxis: { type: 'category', name: '年', nameTextStyle: baseText, boundaryGap: false, axisLine: { lineStyle: { color: splitColor } }, axisLabel: baseText },
+            yAxis: { type: 'value', name: '综合成本（万元）', nameTextStyle: baseText, axisLabel: baseText, splitLine: { lineStyle: { color: splitColor } } },
+            series: [
+              { name: '华泰综合成本', type: 'line', smooth: true, data: [], itemStyle: { color: htColor }, lineStyle: { width: 3, color: htColor }, symbol: 'none' },
+              { name: '友商综合成本', type: 'line', smooth: true, data: [], itemStyle: { color: otColor }, lineStyle: { width: 3, color: otColor }, symbol: 'none' }
+            ]
+          };
+          render();
+          window.addEventListener('resize', function () { bars.resize(); lines.resize(); calcChart.resize(); });
+        }
+
+        window.__bootCharts = function () { if (window.echarts) initCharts(); };
+
+        Object.keys(inputs).forEach(function (k) {
+          inputs[k].addEventListener('input', render);
+          inputs[k].addEventListener('change', render);
+        });
+
+        $('btn-reset').addEventListener('click', function () {
+          Object.keys(inputs).forEach(function (k) { inputs[k].value = defaults[k]; });
+          render();
+        });
+
+        document.querySelectorAll('[data-months]').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            inputs.months.value = btn.getAttribute('data-months');
+            render();
+          });
+        });
+
+        $('btn-scroll').addEventListener('click', function () {
+          $('calc-note').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+
+        if (window.echarts) { initCharts(); }
+      })();
+    </script>
+    <script>
+      (function () {
+        if (window.echarts) { window.__bootCharts(); return; }
+        var urls = [
+          'https://cdn.bootcdn.net/ajax/libs/echarts/5.5.1/echarts.min.js',
+          'https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js',
+          'https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.1/echarts.min.js'
+        ];
+        var i = 0;
+        (function load() {
+          if (i >= urls.length) return;
+          var s = document.createElement('script');
+          s.src = urls[i++];
+          s.onload = function () { window.__bootCharts(); };
+          s.onerror = load;
+          document.head.appendChild(s);
+        })();
+      })();
+    </script>
+  </body>
+</html>
