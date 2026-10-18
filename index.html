@@ -577,6 +577,7 @@
       <footer class="workmate-attribution">由 WORKMATE 生成</footer>
     </div>
 
+    <script src="./assets/vendor/echarts.min.js"></script>
     <script>
       (function () {
         var $ = function (id) { return document.getElementById(id); };
@@ -746,25 +747,6 @@
         });
 
         if (window.echarts) { initCharts(); }
-      })();
-    </script>
-    <script>
-      (function () {
-        if (window.echarts) { window.__bootCharts(); return; }
-        var urls = [
-          'https://cdn.bootcdn.net/ajax/libs/echarts/5.5.1/echarts.min.js',
-          'https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js',
-          'https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.1/echarts.min.js'
-        ];
-        var i = 0;
-        (function load() {
-          if (i >= urls.length) return;
-          var s = document.createElement('script');
-          s.src = urls[i++];
-          s.onload = function () { window.__bootCharts(); };
-          s.onerror = load;
-          document.head.appendChild(s);
-        })();
       })();
     </script>
   </body>
