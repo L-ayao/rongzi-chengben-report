@@ -519,7 +519,6 @@
             <article class="kpi-card is-delta">
               <p class="kpi-label"><span class="dot"></span>差额</p>
               <p class="kpi-value kpi-delta-value" id="out-delta">—</p>
-              <p class="kpi-sub" id="out-delta-sub">华泰 − 其他</p>
             </article>
           </div>
 
@@ -635,7 +634,6 @@
           var d = $('out-delta');
           d.textContent = (r.delta >= 0 ? '+' : '') + fmt(r.delta) + ' 万元';
           d.style.color = r.delta >= 0 ? 'var(--good)' : 'var(--bad)';
-          $('out-delta-sub').textContent = (r.delta >= 0 ? '华泰更省' : '其他券商更省') + fmt(Math.abs(r.delta)) + '万';
           updateCalcChart(r);
         }
 
