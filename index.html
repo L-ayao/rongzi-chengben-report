@@ -110,6 +110,11 @@
         background: var(--ht-soft); color: var(--ht); font-weight: 700;
         font-size: 14.5px; letter-spacing: .02em;
       }
+      .focus-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+      .focus-item {
+        padding: 3px 14px; border-radius: 999px; font-weight: 700; font-size: 13.5px;
+        background: var(--warn-soft); color: var(--warn); border: 1px solid var(--border);
+      }
 
       /* advantage list */
       .adv-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -574,8 +579,12 @@
             <div class="callout is-warn">
               <strong>建议</strong>
               <p>华泰 2.6% 的价值不止于利率数字，而在于四项优势的叠加：</p>
-              <div class="advantage-line">单利计息 · 利息不占额度 · 两年免息展期 · 低成本交易执行</div>
-              <p>您可根据真实负债规模、计划持有期限与交易习惯，在上方动态测算器中代入参数进行验证，重点关注<strong>长期成本曲线</strong>与<strong>授信额度占用</strong>两项指标。</p>
+              <div class="advantage-line">单利计息 · 利息不占额度 · 两年不付息展期 · 低成本交易执行</div>
+              <p>您可根据真实负债规模、计划持有期限与交易习惯，在上方动态测算器中代入参数进行验证，重点关注以下两项指标：</p>
+              <div class="focus-row">
+                <span class="focus-item">长期成本曲线</span>
+                <span class="focus-item">授信额度占用</span>
+              </div>
             </div>
           </div>
         </section>
