@@ -66,7 +66,7 @@
         background: var(--ht-soft); border: 1px solid transparent; border-radius: 999px;
       }
       .page-header h1 { margin: 0 0 12px; font-size: 30px; font-weight: 700; letter-spacing: .01em; }
-      .lede { max-width: 780px; margin: 0 auto; color: var(--muted); font-size: 15px; }
+      .lede { max-width: 960px; margin: 0 auto; color: var(--muted); font-size: 15px; }
 
       /* grid & panels */
       .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
@@ -184,8 +184,7 @@
         <p class="eyebrow">融资融券 · 成本测算</p>
         <h1>融资融券成本测算报告书</h1>
         <p class="lede">
-          以 9,000 万元负债、两年期、按日计息为基准场景，测算两种计息机制下的真实成本：
-          华泰 2.6%（仅按当日融资余额计息，利息不再计息）与其他券商 2.4%（按「融资余额 + 利息」计息，利滚利）。
+          以 9,000 万元负债、两年期、按日计息为基准场景，测算两种计息机制下的真实成本：华泰 2.6%（仅按当日融资余额计息，利息不再计息）与其他券商 2.4%（按「融资余额 + 利息」计息，利滚利）。
         </p>
       </header>
 
@@ -244,15 +243,7 @@
 
           <div class="callout" style="margin-top: 16px">
               <strong>核心差异：2.4% 是标价，不是真实成本</strong>
-              <p>
-                其他券商标价 2.4%，但计息基数为「融资余额 + 利息」并按日利滚利，
-                其<strong>真实有效年利率达 2.4290%</strong>（= (1 + 2.4% ÷ 365)<sup>365</sup> − 1），
-                与华泰 2.6% 的实际差距仅 <strong>0.171 个百分点</strong>。
-              </p>
-              <p>
-                复利基数每日膨胀，成本曲线呈<strong>指数上升</strong>；
-                与华泰的线性成本差距随时间持续收窄，<strong>持有满 6.59 年后总成本反超</strong>。
-              </p>
+              <p>其他券商标价 2.4%，但计息基数为「融资余额 + 利息」并按日利滚利，其<strong>真实有效年利率达 2.4290%</strong>（= (1 + 2.4% ÷ 365)<sup>365</sup> − 1），与华泰 2.6% 的实际差距仅 <strong>0.171 个百分点</strong>。复利基数每日膨胀，成本曲线呈<strong>指数上升</strong>；与华泰的线性成本差距随时间持续收窄，<strong>持有满 6.59 年后总成本反超</strong>。</p>
             </div>
 
           <ul class="adv-list" style="margin-top: 16px">
@@ -334,15 +325,8 @@
           <div class="section-stack">
             <div class="callout">
               <strong>测算逻辑</strong>
-              <p>
-                <strong>华泰（2.6%，不含利息）：</strong>每日利息 = 当日融资余额 × 2.6% ÷ 365，融资余额恒为 9,000 万，
-                两年利息 = 9,000 × 2.6% × 2 = <strong>468.00 万元</strong>。
-              </p>
-              <p>
-                <strong>其他券商（2.4%，含利息）：</strong>每日利息 =（当日融资余额 + 累计利息）× 2.4% ÷ 365，
-                计息基数逐日递增，730 日后余额 = 9,000 × (1 + 2.4% ÷ 365)<sup>730</sup> = 9,442.52 万，
-                两年利息 = 9,442.52 − 9,000 = <strong>442.52 万元</strong>。
-              </p>
+              <p><strong>华泰（2.6%，不含利息）：</strong>每日利息 = 当日融资余额 × 2.6% ÷ 365，融资余额恒为 9,000 万，两年利息 = 9,000 × 2.6% × 2 = <strong>468.00 万元</strong>。</p>
+              <p><strong>其他券商（2.4%，含利息）：</strong>每日利息 =（当日融资余额 + 累计利息）× 2.4% ÷ 365，计息基数逐日递增，730 日后余额 = 9,000 × (1 + 2.4% ÷ 365)<sup>730</sup> = 9,442.52 万，两年利息 = 9,442.52 − 9,000 = <strong>442.52 万元</strong>。</p>
             </div>
 
             <div class="table-scroll">
@@ -418,15 +402,7 @@
 
             <div class="callout is-warn">
               <strong>如何理解 25.48 万这个数字</strong>
-              <p>
-                两年期利息差额为 25.48 万元，仅占 9,000 万本金的 <strong>0.28%</strong>。
-              </p>
-              <p>
-                而其他券商方案付出的代价是：<strong>利息滚入本金的复利负担、指数上升的成本曲线、失去展期结息灵活性</strong>。
-              </p>
-              <p>
-                若持有期延长至 6.59 年以上，这点标价优势将完全消失并转为劣势。
-              </p>
+              <p>两年期利息差额为 25.48 万元，仅占 9,000 万本金的 <strong>0.28%</strong>；而其他券商方案付出的代价是 <strong>利息滚入本金的复利负担、指数上升的成本曲线、失去展期结息灵活性</strong>。若持有期延长至 6.59 年以上，这点标价优势将完全消失并转为劣势。</p>
             </div>
           </div>
         </section>
@@ -577,13 +553,7 @@
 
             <div class="callout">
               <strong>3. 授信额度与展期灵活性是隐性收益</strong>
-              <p>
-                合约期内无需付息，客户不必为筹措利息向其他金融机构融资，
-                <strong>不占用其他金融机构授信额度</strong>。
-              </p>
-              <p>
-                同时最长两年不付息展期、不影响征信，无需为付息被动减仓。
-              </p>
+              <p>合约期内无需付息，客户不必为筹措利息向其他金融机构融资，<strong>不占用其他金融机构授信额度</strong>；同时最长两年不付息展期、不影响征信，无需为付息被动减仓。</p>
             </div>
 
             <div class="callout">
