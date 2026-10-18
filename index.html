@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
     <meta name="description" content="融资融券成本测算报告书：对比华泰 2.6% 单利计息与其他券商 2.4% 日复利计息机制下的长期真实成本。" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231d4ed8' stroke-width='2'><path d='M3 3v18h18'/><path d='M7 15l4-5 3 3 5-6'/></svg>" />
     <title>融资融券成本测算报告书</title>
     <style>
       :root {
@@ -657,7 +658,7 @@
           if (!calcChart || !calcOption) return;
           var step = r.months <= 36 ? 1 : r.months <= 120 ? 2 : 6;
           var d = curveData(r, step);
-          calcOption.xAxis[0].data = d.xs;
+          calcOption.xAxis.data = d.xs;
           calcOption.series[0].data = d.ht;
           calcOption.series[1].data = d.ot;
           calcChart.setOption(calcOption, { notMerge: true });
